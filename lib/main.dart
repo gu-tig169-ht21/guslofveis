@@ -26,12 +26,8 @@ class MainView extends StatelessWidget {
           centerTitle: true,
           actions: [
             IconButton(
-              icon: Icon(Icons.arrow_right_sharp),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SecondView()));
-              },
-            ),
+              icon: Icon(Icons.filter_alt_outlined),
+              onPressed: () {}),
           ],
         ),
         body: ListView.builder(itemCount: todo.length, itemBuilder: (context, index){
@@ -66,18 +62,54 @@ class MainView extends StatelessWidget {
 class AddView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green[100],
       appBar: AppBar(
         title: Text("Lägg till TODO"),
         backgroundColor: Colors.green,
       ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(height: 30),
+            _card(),
+            Container(height: 30),
+            _buttonRow(),
+          ],
+        ),
+      ) 
     );
   }
-}
 
-class SecondView extends StatelessWidget {
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
+  Widget _card() {
+    return Container(
+      child: Column(
+        children: [
+          Card(
+            margin: EdgeInsets.only(left: 30, right: 30, top: 10),
+            child: TextField(
+              textAlign: TextAlign.center,
+          decoration: InputDecoration(
+            hintText: 'Vad vill du lägga till på din TODO-lista?' ),
+            )
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buttonRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        RaisedButton(
+          onPressed: () {}, 
+          child: Text('Lägg till'),
+          color: Colors.green,
+          textColor: Colors.white,
+          ),
+      ],
     );
   }
 }
