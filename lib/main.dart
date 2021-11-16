@@ -30,7 +30,7 @@ class MainView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.green[100],
       appBar: AppBar(
-        title: const Text('TO DO-lista', style: TextStyle(fontSize: 30)),
+        title: const Text('TIG169 - TODO', style: TextStyle(fontSize: 30)),
         backgroundColor: Colors.green,
         centerTitle: true,
         actions: [
@@ -45,7 +45,7 @@ class MainView extends StatelessWidget {
       body: ListView.builder(
           itemCount: todo.length,
           itemBuilder: (context, index) {
-            return _formatListItem(todo[index]);
+            return _listItem(todo[index]);
           }),
       drawer: Drawer(
         child: ListView(
@@ -90,7 +90,7 @@ class MainView extends StatelessWidget {
     );
   }
 
-  Widget _formatListItem(text) {
+  Widget _listItem(text) {
     return Container(
       margin: EdgeInsets.all(0),
       child: Card(
@@ -148,9 +148,7 @@ class AddView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         RaisedButton(
-          onPressed: () {
-            
-          },
+          onPressed: () {},
           child: Text('Lägg till'),
           color: Colors.green,
           textColor: Colors.white,
