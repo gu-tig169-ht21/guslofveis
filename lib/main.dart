@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:my_first_app/listviewbuilder.dart';
+import 'package:my_first_app/models/todoitem.dart';
+import 'package:my_first_app/providers/listprovider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => ListProvider(), 
+    child: const MyApp()
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: MainView(),
     );
   }
 }
 
 class MainView extends StatelessWidget {
-  List<String> todo = [
-    'Plugga',
-    'Städa',
-    'Matlagning',
-    'Handla',
-    'Träna',
-    'Umgås'
-  ];
-  List<String> filter = ['Alla', 'Gjorda', 'Ogjorda'];
+  const MainView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,70 +43,33 @@ class MainView extends StatelessWidget {
                   ]),
         ],
       ),
-      body: ListView.builder(
-          itemCount: todo.length,
-          itemBuilder: (context, index) {
-            return _listItem(todo[index]);
-          }),
-      drawer: Drawer(
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.green,
-              ),
-              child: Text('Filtrera', style: TextStyle(fontSize: 35)),
-            ),
-            ListTile(
-              title: const Text('Alla', style: TextStyle(fontSize: 18)),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Gjorda', style: TextStyle(fontSize: 18)),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Ogjorda', style: TextStyle(fontSize: 18)),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add, size: 50),
-        backgroundColor: Colors.green,
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => AddView()));
-        },
-      ),
+      body: Consumer<ListProvider>(
+        builder: (context, provider, child) {
+          return ListViewBuilder(provider.todoitems);
+        }),
+      floatingActionButton: _flotatingActionButton(context),
     );
   }
 
-  Widget _listItem(text) {
-    return Container(
-      margin: EdgeInsets.all(0),
-      child: Card(
-        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        child: ListTile(
-          leading: Checkbox(value: false, onChanged: (value) {}),
-          title: Text(text, style: TextStyle(fontSize: 25)),
-          trailing: Icon(Icons.delete, size: 30.0),
-        ),
-      ),
-    );
+  Widget _flotatingActionButton(context) {
+    return FloatingActionButton(
+      child: Icon(Icons.add, size: 50),
+        backgroundColor: Colors.green,
+        onPressed: () async {
+          TodoItem item = await Navigator.push(context, 
+            MaterialPageRoute(builder: (context) => AddView()),);
+            print(item.toString());
+          if (item.title.length != 0) {
+            Provider.of<ListProvider>(context, listen: false).add(item);
+          }
+        },
+      );
   }
 }
 
 class AddView extends StatelessWidget {
+  var textController = TextEditingController();
+
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.green[100],
@@ -121,7 +85,7 @@ class AddView extends StatelessWidget {
               Container(height: 30),
               _card(),
               Container(height: 30),
-              _buttonRow(),
+              _buttonRow(context, textController),
             ],
           ),
         ));
@@ -134,6 +98,7 @@ class AddView extends StatelessWidget {
           Card(
               margin: EdgeInsets.only(left: 30, right: 30, top: 10),
               child: TextField(
+                controller: textController,
                 textAlign: TextAlign.center,
                 decoration: InputDecoration(
                     hintText: 'Vad vill du lägga till på din TODO-lista?'),
@@ -143,15 +108,19 @@ class AddView extends StatelessWidget {
     );
   }
 
-  Widget _buttonRow() {
+  Widget _buttonRow(context, textController) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        RaisedButton(
-          onPressed: () {},
-          child: Text('Lägg till'),
-          color: Colors.green,
-          textColor: Colors.white,
+        ElevatedButton(
+          onPressed: () {
+            var item = TodoItem(title: textController.text); 
+            if (item.title.length != 0) {
+              Navigator.pop(context, item);
+            }  
+           }, 
+          child: const Text('Lägg till'), 
+          style: ElevatedButton.styleFrom(primary: Colors.green), 
         ),
       ],
     );
