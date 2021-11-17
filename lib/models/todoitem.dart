@@ -10,9 +10,4 @@ class TodoItem {
   void ifDone(item) {
     done = !done;
   }
-
-  void checkCompletion(item) {
-    if (item.isCompleted = true) {
-    }
-  }
 }

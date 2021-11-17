@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:my_first_app/listviewbuilder.dart';
 import 'package:my_first_app/models/todoitem.dart';
@@ -6,10 +8,7 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
-    create: (context) => ListProvider(), 
-    child: const MyApp()
-    )
-  );
+      create: (context) => ListProvider(), child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -17,14 +16,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: MainView(),
     );
   }
 }
 
 class MainView extends StatelessWidget {
-  const MainView({Key? key}) : super(key: key);
+  MainView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,34 +35,45 @@ class MainView extends StatelessWidget {
         centerTitle: true,
         actions: [
           PopupMenuButton(
-              itemBuilder: (context) => [
-                    PopupMenuItem(child: Text('Visa alla')),
-                    PopupMenuItem(child: Text('Gjorda')),
-                    PopupMenuItem(child: Text('Att göra'))
-                  ]),
+            onSelected: (String value) => {
+              Provider.of<ListProvider>(context, listen: false).setFilterBy(value)
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(child: Text('Visa alla'), value: 'all',),
+              PopupMenuItem(child: Text('Gjorda'), value: 'done',),
+              PopupMenuItem(child: Text('Att göra'), value: 'todo',)
+            ]),
         ],
       ),
-      body: Consumer<ListProvider>(
-        builder: (context, provider, child) {
-          return ListViewBuilder(provider.todoitems);
-        }),
+      body: Consumer<ListProvider>(builder: (context, provider, child) {
+        return ListViewBuilder(provider.todoitems);
+        //return ListViewBuilder(filterList(provider.todoitems, provider.filterBy));
+      }),
       floatingActionButton: _flotatingActionButton(context),
     );
+  }
+
+  List<TodoItem>? filterList(list, filterBy){
+    if (filterBy == 'Visa alla') {return list;}
+    if (filterBy == 'Gjorda') {return list.where((item) => item.done == true).toList();}
+    if (filterBy == 'Gjorda') {return list.where((item) => item.done == false).toList();}
   }
 
   Widget _flotatingActionButton(context) {
     return FloatingActionButton(
       child: Icon(Icons.add, size: 50),
-        backgroundColor: Colors.green,
-        onPressed: () async {
-          TodoItem item = await Navigator.push(context, 
-            MaterialPageRoute(builder: (context) => AddView()),);
-            print(item.toString());
-          if (item.title.length != 0) {
-            Provider.of<ListProvider>(context, listen: false).add(item);
-          }
-        },
-      );
+      backgroundColor: Colors.green,
+      onPressed: () async {
+        TodoItem item = await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AddView()),
+        );
+        print(item.toString());
+        if (item.title.length != 0) {
+          Provider.of<ListProvider>(context, listen: false).add(item);
+        }
+      },
+    );
   }
 }
 
@@ -114,13 +124,13 @@ class AddView extends StatelessWidget {
       children: [
         ElevatedButton(
           onPressed: () {
-            var item = TodoItem(title: textController.text); 
+            var item = TodoItem(title: textController.text);
             if (item.title.length != 0) {
               Navigator.pop(context, item);
-            }  
-           }, 
-          child: const Text('Lägg till'), 
-          style: ElevatedButton.styleFrom(primary: Colors.green), 
+            }
+          },
+          child: const Text('Lägg till'),
+          style: ElevatedButton.styleFrom(primary: Colors.green),
         ),
       ],
     );
