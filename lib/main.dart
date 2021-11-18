@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:my_first_app/listviewbuilder.dart';
 import 'package:my_first_app/models/todoitem.dart';
@@ -46,17 +44,18 @@ class MainView extends StatelessWidget {
         ],
       ),
       body: Consumer<ListProvider>(builder: (context, provider, child) {
-        return ListViewBuilder(provider.todoitems);
-        //return ListViewBuilder(filterList(provider.todoitems, provider.filterBy));
+        return ListViewBuilder(filterList(provider.todoitems, provider.filterBy));
+        //ListViewBuilder(provider.todoitems);
       }),
       floatingActionButton: _flotatingActionButton(context),
     );
   }
 
-  List<TodoItem>? filterList(list, filterBy){
-    if (filterBy == 'Visa alla') {return list;}
-    if (filterBy == 'Gjorda') {return list.where((item) => item.done == true).toList();}
-    if (filterBy == 'Gjorda') {return list.where((item) => item.done == false).toList();}
+  List<TodoItem> filterList(List<TodoItem> list, String filterBy){
+    if (filterBy == 'all') {return list;}
+    if (filterBy == 'done') {return list.where((item) => item.done == true).toList();}
+    if (filterBy == 'todo') {return list.where((item) => item.done == false).toList();}
+    return [];
   }
 
   Widget _flotatingActionButton(context) {
