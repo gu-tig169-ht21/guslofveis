@@ -63,12 +63,12 @@ class MainView extends StatelessWidget {
       child: Icon(Icons.add, size: 50),
       backgroundColor: Colors.green,
       onPressed: () async {
-        TodoItem item = await Navigator.push(
+        dynamic item = await Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => AddView()),
         );
-        print(item.toString());
-        if (item.title.length != 0) {
+        //print(item.toString());
+        if (item != null) {
           Provider.of<ListProvider>(context, listen: false).add(item);
         }
       },
