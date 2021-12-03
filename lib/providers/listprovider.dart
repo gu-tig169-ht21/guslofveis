@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+//
 class ListProvider with ChangeNotifier {
   List<TodoItem> todoitems = [];
   List<TodoItem> get list => todoitems;
@@ -14,7 +15,7 @@ ListProvider() {
   fetch();
 }
 
-  //Hämta lista
+  //Hämta lista från api
   void fetch() async {
     todoitems = await TodoFetcher.fetchTodo();
     notifyListeners();
@@ -33,12 +34,14 @@ ListProvider() {
     notifyListeners();
   }
 
+  // Uppdatera Todo-items status - gjord/inte gjord
   void todone(TodoItem item) async {
     item.ifDone(item);
     todoitems = await TodoFetcher.updateTodo(item);
     notifyListeners();
   }
 
+  // Filtrera listan
   void setFilterBy(String filterBy) {
     this.filterBy = filterBy;
     notifyListeners();

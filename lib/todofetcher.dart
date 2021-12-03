@@ -6,6 +6,7 @@ import 'package:my_first_app/models/todoitem.dart';
 class TodoFetcher {
   List<TodoItem> todoItem = [];
 
+  // Hämta Todo-lista från API
   static Future<List<TodoItem>> fetchTodo() async {
     http.Response response = await http.get(
       Uri.parse(
@@ -18,6 +19,7 @@ class TodoFetcher {
     return todoItem;
   }
 
+  // Spara tillagt Todo-item på API
   static Future<List<TodoItem>> addTodo(TodoItem item) async {
     http.Response response = await http.post(
       Uri.parse(
@@ -32,6 +34,7 @@ class TodoFetcher {
     return todoItem;
   }
 
+    // Ta bort Todo-item från API
   static Future<List<TodoItem>> removeTodo(TodoItem item) async {
     http.Response response = await http.delete(
       Uri.parse(
@@ -45,6 +48,7 @@ class TodoFetcher {
     return todoItem;
   }
 
+  // Uppdatera existerande Todo-item på API
   static Future<List<TodoItem>> updateTodo(TodoItem item) async {
     http.Response response = await http.put(
       Uri.parse(

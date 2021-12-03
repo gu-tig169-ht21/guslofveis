@@ -48,7 +48,6 @@ class MainView extends StatelessWidget {
       ),
       body: Consumer<ListProvider>(builder: (context, provider, child) {
         return ListViewBuilder(filterList(provider.todoitems, provider.filterBy));
-        //ListViewBuilder(provider.todoitems);
       }),
       floatingActionButton: _flotatingActionButton(context),
     );
@@ -70,7 +69,6 @@ class MainView extends StatelessWidget {
           context,
           MaterialPageRoute(builder: (context) => AddView()),
         );
-        //print(item.toString());
         if (item != null) {
           Provider.of<ListProvider>(context, listen: false).add(item);
         }
