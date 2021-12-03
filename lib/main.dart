@@ -7,6 +7,7 @@ import 'package:my_first_app/providers/listprovider.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
+// Initierar Provider för MyApp
 void main() {
   runApp(ChangeNotifierProvider(
       create: (context) => ListProvider(), child: const MyApp()));
@@ -35,9 +36,9 @@ class MainView extends StatelessWidget {
         backgroundColor: Colors.green,
         centerTitle: true,
         actions: [
-          PopupMenuButton(
+          PopupMenuButton( 
             onSelected: (String value) => {
-              Provider.of<ListProvider>(context, listen: false).setFilterBy(value)
+              Provider.of<ListProvider>(context, listen: false).setFilterBy(value) // Sätter värdet för det valda Popup-item
             },
             itemBuilder: (context) => [
               PopupMenuItem(child: Text('Visa alla'), value: 'all',),
@@ -53,6 +54,7 @@ class MainView extends StatelessWidget {
     );
   }
 
+  // Filtrerar listan baserat på värdet av filterBy
   List<TodoItem> filterList(List<TodoItem> list, String filterBy){
     if (filterBy == 'all') {return list;}
     if (filterBy == 'done') {return list.where((item) => item.done == true).toList();}
@@ -77,6 +79,7 @@ class MainView extends StatelessWidget {
   }
 }
 
+// Tillhandahåller Lägg till-vyn
 class AddView extends StatelessWidget {
   var textController = TextEditingController();
 
@@ -93,7 +96,7 @@ class AddView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(height: 30),
-              _card(),
+              _inputBox(),
               Container(height: 30),
               _buttonRow(context, textController),
             ],
@@ -101,7 +104,8 @@ class AddView extends StatelessWidget {
         ));
   }
 
-  Widget _card() {
+  // Hanterar inputrutan och dess UI
+  Widget _inputBox() {
     return Container(
       child: Column(
         children: [
@@ -118,6 +122,7 @@ class AddView extends StatelessWidget {
     );
   }
 
+  // Hanterar lägg till-knappen och värdet från inputBox()
   Widget _buttonRow(context, textController) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

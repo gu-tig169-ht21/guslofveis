@@ -5,7 +5,7 @@ import 'package:my_first_app/providers/listprovider.dart';
 
 import 'providers/listprovider.dart';
 
-// UI för listan med checkbox, ikoner, text och textdekoration
+// Tillhandahåller listan med checkbox, ikoner, text och textdekoration
 class ListViewBuilder extends StatelessWidget {
   List<TodoItem> list = [];
 

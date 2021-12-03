@@ -1,9 +1,6 @@
 import 'package:provider/provider.dart';
 import 'dart:convert';
 
-List<TodoItem> todoitemFromJson(String todo) => List<TodoItem>.from(jsonDecode(todo).map((x) => TodoItem.fromJson(x)));
-String todoitemToJson(List<TodoItem> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
 //Blueprint för Items - hur ser arkitekturen för ett Item ut
 class TodoItem {
   final String id;
